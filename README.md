@@ -22,4 +22,4 @@ Features include:
 4. Run `HMSOceanViewResort.java`.
 
 ## Author
-Madusha
+Madusha Priyashan
