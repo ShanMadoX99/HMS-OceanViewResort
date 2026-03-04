@@ -16,7 +16,10 @@ Features include:
 - MySQL (Connector/J)
 
 ## How to Run
-1. Clone the repository.
+1. Clone the repository. 
+(bash
+   git clone https://github.com/ShanMadoX99/HMS-OceanViewResort.git
+)
 2. Open in IntelliJ IDEA.
 3. Configure MySQL database (`hotel_db`).
 4. Run `HMSOceanViewResort.java`.
