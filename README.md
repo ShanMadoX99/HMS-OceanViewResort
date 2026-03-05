@@ -24,5 +24,5 @@ Features include:
 3. Configure MySQL database (`hotel_db`).
 4. Run `HMSOceanViewResort.java`.
 
-## Author
+### Author
 Madusha Priyashan
