@@ -14,6 +14,7 @@ Features include:
 - Java (JDK 17)
 - IntelliJ IDEA
 - MySQL (Connector/J)
+- JavaFX
 
 ## How to Run
 1. Clone the repository. 
