@@ -5,9 +5,9 @@ public class HMSOceanViewResort {
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        if (!login()) {
-            System.out.println("Invalid login. Exiting...");
-            return;
+        if (!LoginSystem.login()) {
+            System.err.println("Exiting system due to failed login.");
+            return; // stop program if login fails
         }
 
         int choice;
@@ -15,7 +15,7 @@ public class HMSOceanViewResort {
             System.out.println("\n--- HMS Ocean View Resort ---");
             System.out.println("1. Add New Reservation");
             System.out.println("2. Display Reservation Details");
-            System.out.println("3. List All Reservations"); // new option
+            System.out.println("3. List All Reservations");
             System.out.println("4. Calculate and Print Bill");
             System.out.println("5. Help");
             System.out.println("6. Exit");
@@ -23,18 +23,33 @@ public class HMSOceanViewResort {
             choice = sc.nextInt();
 
             switch (choice) {
-                case 1 -> addReservation();
-                case 2 -> displayReservation();
-                case 3 -> listAllReservations();
+                case 1 -> {
+                    System.out.print("Guest ID: ");
+                    int guestId = sc.nextInt();
+                    sc.nextLine(); // consume newline
+                    System.out.print("Room Type (Deluxe/Standard): ");
+                    String roomType = sc.nextLine();
+                    System.out.print("Check-in (YYYY-MM-DD): ");
+                    String checkIn = sc.nextLine();
+                    System.out.print("Check-out (YYYY-MM-DD): ");
+                    String checkOut = sc.nextLine();
+
+                    service.addReservation(guestId, roomType, checkIn, checkOut);
+                }
+                case 2 -> {
+                    System.out.print("Enter Reservation ID: ");
+                    int resId = sc.nextInt();
+                    service.displayReservation(resId);
+                }
+                case 3 -> service.listAllReservations();
                 case 4 -> calculateBill();
                 case 5 -> help();
                 case 6 -> {
                     System.out.println("Exiting system... Goodbye!");
-                    System.exit(0);  // ✅ ends the program immediately
+                    System.exit(0);
                 }
                 default -> System.out.println("Invalid choice!");
             }
-
         } while (choice != 6);
     }
 
@@ -48,45 +63,7 @@ public class HMSOceanViewResort {
         return user.equals("admin") && pass.equals("1234");
     }
 
-    private static void addReservation() {
-        try {
-            Connection conn = DBConnection.getConnection();
-
-            System.out.print("Guest ID: ");
-            int guestId = sc.nextInt();
-            sc.nextLine(); // consume newline
-
-            System.out.print("Room Type (Deluxe/Standard): ");
-            String roomType = sc.nextLine();
-            if (roomType.isEmpty()) {
-                System.out.println("❌ Room type cannot be empty!");
-                return;
-            }
-
-            System.out.print("Check-in (YYYY-MM-DD): ");
-            String checkIn = sc.nextLine();
-            System.out.print("Check-out (YYYY-MM-DD): ");
-            String checkOut = sc.nextLine();
-
-            if (checkIn.compareTo(checkOut) >= 0) {
-                System.out.println("❌ Check-out date must be after check-in date!");
-                return;
-            }
-
-            String sql = "INSERT INTO Reservations (guest_id, room_type, check_in, check_out) VALUES (?, ?, ?, ?)";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, guestId);
-            ps.setString(2, roomType);
-            ps.setString(3, checkIn);
-            ps.setString(4, checkOut);
-            ps.executeUpdate();
-
-            System.out.println("✅ Reservation added successfully!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }
-    }
+    private static ReservationService service = new ReservationService();
 
     private static void displayReservation() {
         try {
